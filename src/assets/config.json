@@ -1,0 +1,4 @@
+ {
+    "itemsUrl": "http://localhost:8080/items",
+    "textfile": "assets/textfile.txt"
+ }
