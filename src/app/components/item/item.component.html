@@ -1,37 +1,76 @@
 <!-- Card -->
-
 <div class="card">
   <!-- Card image -->
-  <div class="view overlay">
+  <div class="view overlay zoom">
     <img
       class="card-img-top"
       src="https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(67).jpg"
       alt="Card image cap"
     />
-    <a href="#!">
-      <div class="mask rgba-white-slight"></div>
+    <a>
+      <div
+        class="mask waves-effect waves-light rgba-white-slight"
+        mdbWavesEffect
+      ></div>
     </a>
   </div>
+  <!-- Card image -->
 
   <!-- Card content -->
   <div class="card-body">
-    <!-- Title -->
+    <!-- Card title -->
     <h4 class="card-title">{{ item.name }}</h4>
-    <!-- Text -->
-    <p class="card-text">{{ item.description }}</p>
-    <p>
-      {{ item.creationTime }}
+
+    <!-- Side information about Item-->
+    <div class="card-text">
+      <!-- Button - collapse toggle -->
+      <button
+        mdbBtn
+        gradient="aqua"
+        type="button"
+        class="waves-light"
+        (click)="itemInfo.toggle()"
+        mdbWavesEffect
+      >
+        Toggle collapse
+        <mdb-icon fas icon="caret-down" class="ml-1"></mdb-icon>
+      </button>
+      <!-- Button -->
+
+      <!-- Item info - collapse option -->
+      <div class="" mdbCollapse #itemInfo="bs-collapse">
+        <!-- Text -->
+        <p class="card-text">{{ item.description }}</p>
+        <p class="card-text">
+          {{ item.creationTime }}
+        </p>
+        <p class="card-text">
+          Number of bids: <span>{{ item.numberOfBids }}</span>
+        </p>
+      </div>
+      <!-- Item info -->
+    </div>
+    <!-- Side information about Item-->
+
+    <!-- Card text -->
+    <p class="card-text">
+      Highest bid: <span>{{ item.bidPrice }}</span
+      >$
     </p>
+
+    <!-- Input - Bid -->
     <div class="md-form">
-      <input type="text" id="inputMDEx" class="form-control" />
-      <label for="inputMDEx">Medium input</label>
+      <input mdbInput type="text" id="form1" class="form-control" />
+      <label for="form1" class="">Input your bid</label>
     </div>
+    <!-- Input -->
+
+    <!-- Button - Bid -->
+    <button mdbBtn class="tempting-azure-gradient" type="button" mdbWavesEffect>
+      BID<mdb-icon fas icon="dollar-sign" class="ml-1"></mdb-icon>
+    </button>
     <!-- Button -->
-    <a href="#" class="btn tempting-azure-gradient mdbWavesEffect">Bid</a>
-    <div class="md-form">
-      <input type="text" id="form1" class="form-control" />
-      <label for="form1">Example label</label>
-    </div>
   </div>
+  <!-- Card content -->
 </div>
 <!-- Card -->
