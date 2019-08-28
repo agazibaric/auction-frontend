@@ -22,6 +22,7 @@ import { TestComponent } from "./components/test/test.component";
 import { LoginComponent } from "./components/login/login.component";
 import { FormsModule } from "@angular/forms";
 import { AppService } from "./service/app.service";
+import { AuthInterceptor } from "./interceptor";
 
 @Injectable()
 export class XhrInterceptor implements HttpInterceptor {
@@ -54,8 +55,11 @@ export class XhrInterceptor implements HttpInterceptor {
     FormsModule
   ],
   providers: [
-    AppService,
-    { provide: HTTP_INTERCEPTORS, useClass: XhrInterceptor, multi: true }
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

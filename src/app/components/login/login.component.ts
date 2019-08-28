@@ -8,21 +8,29 @@ import { HttpClient } from "@angular/common/http";
   templateUrl: "./login.component.html"
 })
 export class LoginComponent implements OnInit {
-  credentials = { username: "", password: "" };
+
+  username = "nick"
+  password = "pass"
 
   constructor(
     private app: AppService,
     private http: HttpClient,
     private router: Router
-  ) {}
+    ) {}
 
-  login() {
-    console.log("HELLO");
-    this.app.authenticate(this.credentials, () => {
-      this.router.navigateByUrl("/");
-    });
-    return false;
+
+  ngOnInit() {
   }
 
-  ngOnInit() {}
+  onLogin() {
+    console.log("onLogin")
+    this.app.authenticate(this.username, this.password)
+    .subscribe(data => {
+      console.log("Stigli podaci onLogin subscribe")
+      console.log(data)
+      localStorage.setItem("username", this.username)
+      localStorage.setItem("password", this.password)
+    })
+  }
+
 }
