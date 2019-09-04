@@ -23,16 +23,8 @@ import { LoginComponent } from "./components/login/login.component";
 import { FormsModule } from "@angular/forms";
 import { AppService } from "./service/app.service";
 import { AuthInterceptor } from "./interceptor";
-
-@Injectable()
-export class XhrInterceptor implements HttpInterceptor {
-  intercept(req: HttpRequest<any>, next: HttpHandler) {
-    const xhr = req.clone({
-      headers: req.headers.set("X-Requested-With", "XMLHttpRequest")
-    });
-    return next.handle(xhr);
-  }
-}
+import { MyitemsComponent } from "./components/myitems/myitems.component";
+import { RegistrationComponent } from "./components/registration/registration.component";
 
 @NgModule({
   declarations: [
@@ -44,7 +36,9 @@ export class XhrInterceptor implements HttpInterceptor {
     HomesectionComponent,
     MainComponent,
     TestComponent,
-    LoginComponent
+    LoginComponent,
+    MyitemsComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,

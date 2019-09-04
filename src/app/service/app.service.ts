@@ -1,37 +1,45 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { map } from "rxjs/operators";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root"
 })
 export class AppService {
   authenticated = false;
-  username = ""
-  password = ""
+  username = "";
+  password = "";
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
-  authenticate(username: string, password: string) {
-    console.log("AUTHENTICATE")
-    this.username = username
-    this.password = password
-    localStorage.setItem('username', username);
-    localStorage.setItem('password', password);
-    //const headers = new HttpHeaders({ Authorization: 'Basic ' + btoa(username + ':' + password) });
-    /* return this.httpClient.get<any>('http://localhost:8080/user')
-    .pipe(map(
-      userData => {
-        console.log("Successful")
-        console.log(userData)
-        this.username = username
-        this.password = password
-        this.authenticated = true
-       localStorage.setItem('username', username);
-       localStorage.setItem('username', password);
-       return userData;
-      }
-    )) */
+  authenticate(username: string, password: string): Observable<any> {
+    console.log("AUTHENTICATE");
+    let token = btoa(username + ":" + password);
+    const headers = new HttpHeaders({
+      Authorization: "Basic " + token
+    });
+    return this.httpClient
+      .get<any>("http://localhost:8080/user", { headers })
+      .pipe(
+        map(userData => {
+          console.log("Successful");
+          console.log(userData);
+          this.username = username;
+          this.password = password;
+          this.authenticated = true;
+          localStorage.setItem("id", userData["id"]);
+          localStorage.setItem("username", username);
+          localStorage.setItem("password", password);
+          localStorage.setItem("token", token);
+          return userData;
+        })
+      );
+  }
+
+  getUserId() {
+    if (!this.isUserLoggedIn) return null;
+    return localStorage.getItem("id");
   }
 
   getUsername() {
@@ -42,13 +50,20 @@ export class AppService {
     return localStorage.getItem("password");
   }
 
+  getToken() {
+    return localStorage.getItem("token");
+  }
+
   isUserLoggedIn() {
-    let user = localStorage.getItem('username')
-    console.log(!(user === null))
-    return !(user === null)
+    let user = localStorage.getItem("username");
+    console.log("IS user logged in: " + !(user === null));
+    return !(user === null);
   }
 
   logOut() {
-    localStorage.removeItem('username')
+    console.log("Logged out!");
+    localStorage.removeItem("username");
+    localStorage.removeItem("token");
+    localStorage.removeItem("id");
   }
 }
