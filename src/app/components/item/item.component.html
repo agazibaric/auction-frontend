@@ -1,5 +1,6 @@
 <!-- Card -->
-<div class="card">
+
+<div class="card z-depth-2">
   <!-- Card image -->
   <div class="view overlay zoom">
     <img
@@ -47,6 +48,9 @@
         <p class="card-text">
           Number of bids: <span>{{ item.numberOfBids }}</span>
         </p>
+        <p class="card-text">
+          Highest bidder: <span>{{ item.highestBidder }}</span>
+        </p>
       </div>
       <!-- Item info -->
     </div>
@@ -58,17 +62,33 @@
       >$
     </p>
 
-    <!-- Input - Bid -->
-    <div class="md-form">
-      <input mdbInput type="text" id="form1" class="form-control" />
-      <label for="form1" class="">Input your bid</label>
-    </div>
-    <!-- Input -->
+    <form (submit)="onLogin()">
+      <!-- Input - Bid -->
+      <div class="md-form">
+        <input
+          mdbInput
+          type="number"
+          step="0.01"
+          id="form1"
+          class="form-control"
+          name="bidPrice"
+          [(ngModel)]="bidPrice"
+        />
+        <label for="form1" class="">Input your bid</label>
+      </div>
+      <!-- Input -->
 
-    <!-- Button - Bid -->
-    <button mdbBtn class="tempting-azure-gradient" type="button" mdbWavesEffect>
-      BID<mdb-icon fas icon="dollar-sign" class="ml-1"></mdb-icon>
-    </button>
+      <!-- Button - Bid -->
+      <button
+        mdbBtn
+        (click)="onBid($event)"
+        class="tempting-azure-gradient"
+        type="button"
+        mdbWavesEffect
+      >
+        BID<mdb-icon fas icon="dollar-sign" class="ml-1"></mdb-icon>
+      </button>
+    </form>
     <!-- Button -->
   </div>
   <!-- Card content -->

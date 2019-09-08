@@ -21,7 +21,7 @@ import { MainComponent } from "./components/main/main.component";
 import { TestComponent } from "./components/test/test.component";
 import { LoginComponent } from "./components/login/login.component";
 import { FormsModule } from "@angular/forms";
-import { AppService } from "./service/app.service";
+import { CountdownModule } from "ngx-countdown";
 import { AuthInterceptor } from "./interceptor";
 import { MyitemsComponent } from "./components/myitems/myitems.component";
 import { RegistrationComponent } from "./components/registration/registration.component";
