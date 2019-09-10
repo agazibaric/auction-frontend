@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, AfterViewInit } from "@angular/core";
 import { ItemsService } from "../items.service";
 import { AppService } from "src/app/service/app.service";
+declare const moment: any;
 
 @Component({
   selector: "app-item",
@@ -16,6 +17,8 @@ export class ItemComponent implements OnInit {
 
   ngOnInit() {
     this.updateHighestBidder();
+    console.log("sdasdasdasd");
+    console.log(moment("1982-05-25").countdown());
   }
 
   updateHighestBidder() {
