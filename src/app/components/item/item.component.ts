@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, AfterViewInit } from "@angular/core";
 import { ItemsService } from "../items.service";
 import { AppService } from "src/app/service/app.service";
-declare const moment: any;
+declare var moment: any;
+declare var $: any;
 
 @Component({
   selector: "app-item",
@@ -17,8 +18,20 @@ export class ItemComponent implements OnInit {
 
   ngOnInit() {
     this.updateHighestBidder();
-    console.log("sdasdasdasd");
-    console.log(moment("1982-05-25").countdown());
+  }
+
+  ngAfterViewInit(): void {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
+    console.log("-----------------");
+    let itemId = "#clock-" + this.item.id;
+    console.log(itemId);
+    $(itemId).countdown("2020/10/10", function(event) {
+      $(this).html(event.strftime("%D days %H:%M:%S"));
+    });
+    /*  $(function() {
+      $('[data-toggle="popover"]').popover();
+    }); */
   }
 
   updateHighestBidder() {

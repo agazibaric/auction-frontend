@@ -1,4 +1,13 @@
 <!-- Card -->
+<!-- <button
+  type="button"
+  class="btn btn-lg btn-danger"
+  data-toggle="popover"
+  title="Popover title"
+  data-content="And here's some amazing content. It's very engaging. Right?"
+>
+  Click to toggle popover
+</button> -->
 
 <div class="card z-depth-2">
   <!-- Card image -->
@@ -57,10 +66,18 @@
     <!-- Side information about Item-->
 
     <!-- Card text -->
-    <p class="card-text">
-      Highest bid: <span>{{ item.bidPrice }}</span
-      >$
-    </p>
+    <div class="card-text">
+      <p>
+        Highest bid: <span>{{ item.bidPrice }}</span
+        >$
+      </p>
+      <p class="text-default">
+        Time remaining: <br /><span
+          class="font-weight-bold text-default"
+          id="{{ 'clock-' + item.id }}"
+        ></span>
+      </p>
+    </div>
 
     <form (submit)="onLogin()">
       <!-- Input - Bid -->

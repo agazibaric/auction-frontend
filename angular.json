@@ -33,12 +33,13 @@
               "src/styles.scss"
             ],
             "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
               "node_modules/chart.js/dist/Chart.js",
               "node_modules/hammerjs/hammer.min.js",
               "node_modules/moment/min/moment.min.js",
               "node_modules/countdown/countdown.js",
               "node_modules/moment-countdown/dist/moment-countdown.js",
-              "src/assets/js/example.js"
+              "bower_components/jquery.countdown/dist/jquery.countdown.min.js"
             ]
           },
           "configurations": {
