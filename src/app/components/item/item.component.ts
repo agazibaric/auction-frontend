@@ -11,8 +11,8 @@ declare var $: any;
 })
 export class ItemComponent implements OnInit {
   @Input() item: Item;
-  bidPrice: number;
-  highestBidder: string;
+  bidPrice: number = 0;
+  highestBidder: string = "";
 
   constructor(private itemService: ItemsService, private auth: AppService) {}
 
@@ -53,11 +53,13 @@ export class ItemComponent implements OnInit {
       alert("You have to be logged in to make a bid!");
       return;
     }
-    let bid = this.item.bidPrice;
-    console.log(bid);
-    console.log(this.bidPrice);
-    if (this.bidPrice <= bid) {
-      alert("You have to bid more then current price which is " + bid + "$");
+    let currentBid = this.item.bidPrice;
+    if (this.bidPrice <= 0) {
+      alert("You have to bid more then 0!");
+    } else if (this.bidPrice <= currentBid) {
+      alert(
+        "You have to bid more then current price which is " + currentBid + "$"
+      );
     } else {
       alert("You are now highest bidder!");
       this.item.bidPrice = this.bidPrice;

@@ -1,5 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { MDBBootstrapModule } from "angular-bootstrap-md";
 
 import { AppComponent } from "./app.component";
@@ -39,7 +40,8 @@ import { RegistrationComponent } from "./components/registration/registration.co
     MDBBootstrapModule.forRoot(),
     BrowserAnimationsModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    NgbModule
   ],
   providers: [
     {
