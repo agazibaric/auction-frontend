@@ -24,4 +24,5 @@ export class NavbarComponent implements OnInit {
     this.username = null;
     this.router.navigateByUrl("/");
   }
+  
 }

@@ -18,21 +18,21 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#"
+          <a class="nav-link" [routerLink]="['/']"
             >Home <span class="sr-only">(current)</span></a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="login">Login</a>
+          <a class="nav-link" [routerLink]="['/login']">Login</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="register">Register</a>
+          <a class="nav-link" [routerLink]="['/register']">Register</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="myitems">My Items</a>
+          <a class="nav-link" [routerLink]="['/myitems']">My Items</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="test">Test</a>
+          <a class="nav-link" [routerLink]="['/test']">Test</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" (click)="logout()">Logout</a>

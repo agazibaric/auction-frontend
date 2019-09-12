@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, AfterViewInit } from "@angular/core";
 import { ItemsService } from "../items.service";
 import { AppService } from "src/app/service/app.service";
-declare var moment: any;
+import * as moment from "moment";
+import "moment/locale/pt-br";
 declare var $: any;
 
 @Component({
@@ -13,6 +14,7 @@ export class ItemComponent implements OnInit {
   @Input() item: Item;
   bidPrice: number = 0;
   highestBidder: string = "";
+  isExpired: boolean = false;
 
   constructor(private itemService: ItemsService, private auth: AppService) {}
 
@@ -23,15 +25,47 @@ export class ItemComponent implements OnInit {
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
-    console.log("-----------------");
+    moment.locale("hr");
+    let itemDuration = moment.duration(this.item.duration);
+    let endTime = moment(this.item.creationTime, "DD/MM/YYYY HH:mm")
+      .add(itemDuration.asSeconds(), "seconds")
+      .local();
+
+    let endTimeFormat = endTime.format("YYYY/MM/DD HH:mm");
+
+    console.log("this.item.creationTime: " + this.item.creationTime);
+    console.log("Ending time local: " + endTimeFormat);
+    console.log("Duration in minutes: " + itemDuration.asMinutes());
+    console.log("IsExpired: " + !endTime.isAfter(moment().local(), "second"));
+
     let itemId = "#clock-" + this.item.id;
-    console.log(itemId);
-    $(itemId).countdown("2020/10/10", function(event) {
-      $(this).html(event.strftime("%D days %H:%M:%S"));
+    let timeInfo: string;
+    $(itemId).countdown(endTimeFormat, function(event) {
+      if (endTime.isAfter(moment().local(), "second")) {
+        let days = event.strftime("%D");
+        let daysFormat = "";
+        switch (days) {
+          case "00":
+            daysFormat = "";
+            break;
+          case "01":
+            daysFormat = "1 dan";
+            break;
+          default:
+            if (days.length) {
+              daysFormat = days + " dana";
+              if (days.charAt(0) == "0") {
+                daysFormat = daysFormat.substring(1, daysFormat.length);
+              }
+            }
+        }
+        timeInfo = event.strftime(daysFormat + " %H:%M:%S");
+      } else {
+        timeInfo = "Expired!";
+        //this.isExpired = true;
+      }
+      $(this).html(timeInfo);
     });
-    /*  $(function() {
-      $('[data-toggle="popover"]').popover();
-    }); */
   }
 
   updateHighestBidder() {
