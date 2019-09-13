@@ -15,10 +15,11 @@ import { AppRoutingModule } from "./app-routing.module";
 import { MainComponent } from "./components/main/main.component";
 import { TestComponent } from "./components/test/test.component";
 import { LoginComponent } from "./components/login/login.component";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AuthInterceptor } from "./interceptor";
 import { MyitemsComponent } from "./components/myitems/myitems.component";
 import { RegistrationComponent } from "./components/registration/registration.component";
+import { AddItemComponent } from "./components/add-item/add-item.component";
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { RegistrationComponent } from "./components/registration/registration.co
     TestComponent,
     LoginComponent,
     MyitemsComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    AddItemComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +43,8 @@ import { RegistrationComponent } from "./components/registration/registration.co
     BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
-    NgbModule
+    NgbModule,
+    ReactiveFormsModule
   ],
   providers: [
     {

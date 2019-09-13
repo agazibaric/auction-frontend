@@ -1,8 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { AppService } from "src/app/service/app.service";
-import { HttpClient } from "@angular/common/http";
-import { NavbarComponent } from "../navbar/navbar.component";
 
 @Component({
   selector: "app-login",
