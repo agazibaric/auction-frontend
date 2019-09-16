@@ -4,6 +4,7 @@ import { Item } from "../item/item.component";
 import * as moment from "moment";
 import "moment/locale/pt-br";
 import { ItemsService } from "../items.service";
+import { Router } from "@angular/router";
 declare var $: any;
 
 @Component({
@@ -17,7 +18,8 @@ export class AddItemComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private itemsService: ItemsService
+    private itemsService: ItemsService,
+    private router: Router
   ) {
     this.createItemForm = this.formBuilder.group({
       name: "",
@@ -29,7 +31,11 @@ export class AddItemComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    $("#trigger").click(function() {
+      $("#basicExample").modal({ show: true });
+    });
+  }
 
   onCreateItem(formValue: any): void {
     this.item.name = formValue.name;
@@ -45,9 +51,16 @@ export class AddItemComponent implements OnInit {
       .toISOString();
     console.log("Item form: ");
     console.log(this.item);
-    this.itemsService.createItem(this.item).subscribe(data => {
-      console.log("Subscribe");
-      console.log(data);
-    });
+    this.itemsService.createItem(this.item).subscribe(
+      data => {
+        console.log("Subscribe");
+        console.log(data);
+        alert("Item is successfully created!");
+        this.router.navigateByUrl("/");
+      },
+      error => {
+        alert("Item is not created!");
+      }
+    );
   }
 }
