@@ -20,6 +20,7 @@ import { AuthInterceptor } from "./interceptor";
 import { MyitemsComponent } from "./components/myitems/myitems.component";
 import { RegistrationComponent } from "./components/registration/registration.component";
 import { AddItemComponent } from "./components/add-item/add-item.component";
+import { HighestBidderComponent } from './components/highest-bidder/highest-bidder.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AddItemComponent } from "./components/add-item/add-item.component";
     LoginComponent,
     MyitemsComponent,
     RegistrationComponent,
-    AddItemComponent
+    AddItemComponent,
+    HighestBidderComponent
   ],
   imports: [
     BrowserModule,

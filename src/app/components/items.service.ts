@@ -23,13 +23,19 @@ export class ItemsService {
   constructor(private auth: AppService, private http: HttpClient) {}
 
   getItems() {
-    return this.http.get(this.itemsUrl);
+    return this.http.get(this.itemsUrl + "/search/findByIsExpiredFalse");
   }
 
   getUserItems(): Observable<any> {
     let userId = this.auth.getUserId();
     if (userId === null) return of<any[]>([]);
     return this.http.get(this.userItemsUrl + userId + "/items");
+  }
+
+  getHighestBidderItems(): Observable<any> {
+    let userId = this.auth.getUserId();
+    if (userId === null) return of<any[]>([]);
+    return this.http.get(this.userItemsUrl + userId + "/bids");
   }
 
   getHighestBidder(highestBidderHref) {

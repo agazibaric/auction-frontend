@@ -6,6 +6,7 @@ import { LoginComponent } from "./components/login/login.component";
 import { MyitemsComponent } from "./components/myitems/myitems.component";
 import { RegistrationComponent } from "./components/registration/registration.component";
 import { AddItemComponent } from "./components/add-item/add-item.component";
+import { HighestBidderComponent } from "./components/highest-bidder/highest-bidder.component";
 
 const routes: Routes = [
   { path: "", pathMatch: "full", redirectTo: "home" },
@@ -14,7 +15,8 @@ const routes: Routes = [
   { path: "test", component: TestComponent },
   { path: "login", component: LoginComponent },
   { path: "register", component: RegistrationComponent },
-  { path: "additem", component: AddItemComponent }
+  { path: "additem", component: AddItemComponent },
+  { path: "highestbidder", component: HighestBidderComponent }
 ];
 
 @NgModule({
