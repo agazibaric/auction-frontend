@@ -2,11 +2,7 @@
 <div *ngIf="!isExpired" class="card z-depth-2">
   <!-- Card image -->
   <div class="view overlay zoom">
-    <img
-      class="card-img-top"
-      src="https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(67).jpg"
-      alt="Card image cap"
-    />
+    <img [src]="imagePath" image-Height="200px" image-Width="200px" />
     <a>
       <div
         class="mask waves-effect waves-light rgba-white-slight"

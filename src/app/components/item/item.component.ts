@@ -3,6 +3,8 @@ import { ItemsService } from "../items.service";
 import { AppService } from "src/app/service/app.service";
 import * as moment from "moment";
 import "moment/locale/pt-br";
+import { DomSanitizer } from "@angular/platform-browser";
+import { Observable } from "rxjs";
 declare var $: any;
 
 @Component({
@@ -15,11 +17,27 @@ export class ItemComponent implements OnInit {
   bidPrice: number = 0;
   highestBidder: string = "";
   isExpired: boolean = false;
+  itemImage: File;
+  image: Observable<string>;
+  imagePath: string;
 
-  constructor(private itemService: ItemsService, private auth: AppService) {}
+  constructor(
+    private itemService: ItemsService,
+    private auth: AppService,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit() {
     this.updateHighestBidder();
+
+    /* const reader = new FileReader();
+    reader.onload = e => (this.image = reader.result);
+    reader.readAsDataURL(new Blob([this.item.image])); */
+
+    console.log("IMAGEEEEEE");
+    console.log(this.item.image);
+    //this.image = this.itemService.loadImage(this.item.id);
+    this.imagePath = "http://localhost:8080/items/" + this.item.id + "/image";
   }
 
   ngAfterViewInit(): void {
@@ -115,4 +133,5 @@ export class Item {
   numberOfBids: number;
   highestBidder: string;
   _links: string;
+  image: any;
 }

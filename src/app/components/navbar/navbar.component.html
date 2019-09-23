@@ -3,7 +3,10 @@
   <nav
     class="navbar navbar-expand-lg navbar-dark teal darken-2 scrolling-navbar"
   >
-    <a class="navbar-brand" href="#"><strong>Navbar</strong></a>
+    <a class="navbar-brand" href="#"
+      ><strong class="pr-1 font-weight-bold">AUCTION</strong
+      ><small class="font-weight-light">HOUSE</small></a
+    >
     <button
       class="navbar-toggler"
       type="button"
@@ -41,6 +44,12 @@
           <a class="nav-link" [routerLink]="['/highestbidder']"
             >Highest bidder</a
           >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/wonitems']">Won items</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/images']">Images</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" (click)="logout()">Logout</a>

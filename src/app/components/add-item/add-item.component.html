@@ -83,5 +83,15 @@
       Create
     </button>
   </form>
+
+  <div>
+    <input
+      style="display: none"
+      type="file"
+      (change)="onImageChange($event)"
+      #fileInput
+    />
+    <button (click)="fileInput.click()">Select File</button>
+  </div>
   <!-- Default form contact -->
 </div>

@@ -15,6 +15,7 @@ declare var $: any;
 export class AddItemComponent implements OnInit {
   createItemForm: FormGroup;
   item: Item = new Item();
+  itemImage: File;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -31,10 +32,11 @@ export class AddItemComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    $("#trigger").click(function() {
-      $("#basicExample").modal({ show: true });
-    });
+  ngOnInit() {}
+
+  onImageChange(event) {
+    this.itemImage = event.target.files[0];
+    console.log(this.itemImage);
   }
 
   onCreateItem(formValue: any): void {
@@ -53,8 +55,18 @@ export class AddItemComponent implements OnInit {
     console.log(this.item);
     this.itemsService.createItem(this.item).subscribe(
       data => {
-        console.log("Subscribe");
+        console.log("Item created");
         console.log(data);
+        this.itemsService.uploadItemImage(this.itemImage, data["id"]).subscribe(
+          data => {
+            console.log("Image uploaded");
+            console.log(data);
+          },
+          error => {
+            console.log("Image upload failed");
+            console.log(error);
+          }
+        );
         alert("Item is successfully created!");
         this.router.navigateByUrl("/");
       },

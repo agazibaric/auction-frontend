@@ -12,6 +12,7 @@ export class ItemsService {
   itemsUrl = "http://localhost:8080/items";
   userItemsUrl = "http://localhost:8080/users/"; // later refactor into string format
   bidUrl = "http://localhost:8080/bid";
+  baseUrl = "http://localhost:8080/";
 
   // Http Headers
   httpOptions = {
@@ -24,6 +25,12 @@ export class ItemsService {
 
   getItems() {
     return this.http.get(this.itemsUrl + "/search/findByIsExpiredFalse");
+  }
+
+  getWonItems() {
+    let userId = this.auth.getUserId();
+    if (userId === null) return of<any[]>([]);
+    return this.http.get(this.userItemsUrl + userId + "/itemsWon");
   }
 
   getUserItems(): Observable<any> {
@@ -49,6 +56,17 @@ export class ItemsService {
         retry(1),
         catchError(this.errorHandl)
       );
+  }
+
+  loadImage(itemId: string): Observable<any> {
+    return this.http.get(this.baseUrl + "items/" + itemId + "/image");
+  }
+
+  uploadItemImage(itemImage: File, itemId: string) {
+    //return this.http.post(this.itemsUrl + "/" + itemId + "/image", itemImage);
+    const uploadData = new FormData();
+    uploadData.append("imagefile", itemImage, itemImage.name);
+    return this.http.post(this.itemsUrl + "/" + itemId + "/image", uploadData);
   }
 
   errorHandl(error) {
