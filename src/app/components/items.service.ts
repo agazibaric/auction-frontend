@@ -87,15 +87,6 @@ export class ItemsService {
     let httpParams = new HttpParams()
       .append("itemId", itemId)
       .append("bid", bid);
-    this.http.get<any>(this.bidUrl, { params: httpParams }).subscribe(
-      data => {
-        console.log("Succ bid");
-        console.log(data);
-      },
-      error => {
-        console.log("Fail bid");
-        console.log(error);
-      }
-    );
+    return this.http.get<any>(this.bidUrl, { params: httpParams });
   }
 }

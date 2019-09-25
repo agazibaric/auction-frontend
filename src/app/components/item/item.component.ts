@@ -13,10 +13,9 @@ declare var $: any;
   styleUrls: ["./item.component.scss"]
 })
 export class ItemComponent implements OnInit {
-  @Input() item: Item;
+  @Input() item: Item = new Item();
   bidPrice: number = 0;
   highestBidder: string = "";
-  isExpired: boolean = false;
   itemImage: File;
   image: Observable<string>;
   imagePath: string;
@@ -40,9 +39,18 @@ export class ItemComponent implements OnInit {
     this.imagePath = "http://localhost:8080/items/" + this.item.id + "/image";
   }
 
+  ngAfterContentInit() {
+    console.log("_______________AFTER CONTENT INIT___________");
+    console.log(this.item);
+  }
+
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
+
+    console.log("_______________AFTER VIEW INIT___________");
+    console.log(this.item);
+
     moment.locale("hr");
     let itemDuration = moment.duration(this.item.duration);
     let endTime = moment(this.item.creationTime, "DD/MM/YYYY HH:mm")
@@ -59,6 +67,9 @@ export class ItemComponent implements OnInit {
     let itemId = "#clock-" + this.item.id;
     let timeInfo: string;
     $(itemId).countdown(endTimeFormat, function(event) {
+      console.log("...--..--..--..-- JQUERY ..--..--..--..--.");
+      
+      moment.locale("hr");
       if (endTime.isAfter(moment().local(), "second")) {
         let days = event.strftime("%D");
         let daysFormat = "";
@@ -80,7 +91,10 @@ export class ItemComponent implements OnInit {
         timeInfo = event.strftime(daysFormat + " %H:%M:%S");
       } else {
         timeInfo = "Expired!";
-        //this.isExpired = true;
+        console.log(
+          "____________________________EXPIRED__________________________________"
+        );
+        console.log(this.item);
       }
       $(this).html(timeInfo);
     });
@@ -105,20 +119,38 @@ export class ItemComponent implements OnInit {
       alert("You have to be logged in to make a bid!");
       return;
     }
+
+    if (this.item.isExpired == true) {
+      alert("Item has expired!");
+      return;
+    }
+
     let currentBid = this.item.bidPrice;
     if (this.bidPrice <= 0) {
       alert("You have to bid more then 0!");
-    } else if (this.bidPrice <= currentBid) {
+      return;
+    }
+    if (this.bidPrice <= currentBid) {
       alert(
         "You have to bid more then current price which is " + currentBid + "$"
       );
-    } else {
-      alert("You are now highest bidder!");
-      this.item.bidPrice = this.bidPrice;
-      this.item.numberOfBids++;
-      this.item.highestBidder = this.auth.getUsername();
-      this.itemService.itemBid(this.bidPrice, this.item.id);
+      return;
     }
+
+    this.item.bidPrice = this.bidPrice;
+    this.item.numberOfBids++;
+    this.item.highestBidder = this.auth.getUsername();
+    this.itemService.itemBid(this.bidPrice, this.item.id).subscribe(
+      data => {
+        console.log(data);
+        alert("You are now highest bidder!");
+      },
+      error => {
+        console.log("ERROR");
+        console.log(error);
+        alert("STATUS: " + error.status + "\nMESSAGE: " + error.error);
+      }
+    );
   }
 }
 
@@ -132,6 +164,7 @@ export class Item {
   name: string;
   numberOfBids: number;
   highestBidder: string;
+  isExpired: boolean;
   _links: string;
   image: any;
 }

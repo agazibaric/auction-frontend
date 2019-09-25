@@ -9,6 +9,7 @@ import { AddItemComponent } from "./components/add-item/add-item.component";
 import { HighestBidderComponent } from "./components/highest-bidder/highest-bidder.component";
 import { WonitemsComponent } from "./components/wonitems/wonitems.component";
 import { ItemImagesComponent } from "./components/item-images/item-images.component";
+import { ProfileComponent } from "./components/profile/profile.component";
 
 const routes: Routes = [
   { path: "", pathMatch: "full", redirectTo: "home" },
@@ -20,7 +21,7 @@ const routes: Routes = [
   { path: "additem", component: AddItemComponent },
   { path: "highestbidder", component: HighestBidderComponent },
   { path: "wonitems", component: WonitemsComponent },
-  { path: "images", component: ItemImagesComponent }
+  { path: "profile", component: ProfileComponent }
 ];
 
 @NgModule({

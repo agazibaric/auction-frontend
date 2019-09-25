@@ -23,6 +23,7 @@ import { AddItemComponent } from "./components/add-item/add-item.component";
 import { HighestBidderComponent } from './components/highest-bidder/highest-bidder.component';
 import { WonitemsComponent } from './components/wonitems/wonitems.component';
 import { ItemImagesComponent } from './components/item-images/item-images.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ItemImagesComponent } from './components/item-images/item-images.compon
     AddItemComponent,
     HighestBidderComponent,
     WonitemsComponent,
-    ItemImagesComponent
+    ItemImagesComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
