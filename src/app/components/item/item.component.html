@@ -1,5 +1,10 @@
 <!-- Card -->
-<div class="card z-depth-2">
+<div
+  class="card z-depth-2"
+  [ngStyle]="{
+    border: isHighestBidder ? '2px solid orange' : 'none'
+  }"
+>
   <!-- Card image -->
   <div class="view overlay zoom">
     <img [src]="imagePath" image-Height="200px" image-Width="200px" />
@@ -23,10 +28,10 @@
       <hr />
       <!-- Main item info -->
       <div class="card-text">
-        <p class="font-weight-bold">
+        <div>
           Highest bid: <span>{{ item.bidPrice }}</span
           >$
-        </p>
+        </div>
 
         <p class="text-default">
           Time remaining: <br /><span
@@ -36,6 +41,17 @@
         </p>
       </div>
 
+      <ng-template [ngIf]="isHighestBidder" class="font-weight-bold">
+        <div>You are the highest bidder!</div>
+        <div>Your bid: {{ item.highestBidderPrice }}</div>
+      </ng-template>
+
+      <div>
+        <ng-template [ngIf]="isYourItem()" class="font-weight-bold">
+          This is your item!
+        </ng-template>
+      </div>
+
       <form (submit)="onLogin()">
         <!-- Input - Bid -->
         <div class="md-form">
@@ -43,6 +59,7 @@
             mdbInput
             type="number"
             step="0.01"
+            min="0.00"
             id="form1"
             class="form-control"
             name="bidPrice"
@@ -52,43 +69,44 @@
         </div>
         <!-- Input -->
 
-        <!-- Button - Bid -->
-        <button
-          mdbBtn
-          (click)="onBid($event)"
-          class="tempting-azure-gradient"
-          type="button"
-          mdbWavesEffect
-        >
-          BID<mdb-icon fas icon="dollar-sign" class="ml-1"></mdb-icon>
-        </button>
+        <div class="row">
+          <!-- Button - Bid -->
+          <button
+            mdbBtn
+            (click)="onBid($event)"
+            class="tempting-azure-gradient"
+            type="button"
+            mdbWavesEffect
+          >
+            BID<mdb-icon fas icon="dollar-sign" class="ml-1"></mdb-icon>
+          </button>
+
+          <!-- Info Button -->
+          <ng-template #popContent
+            ><!-- Text -->
+            <div class="card-text">{{ item.description }}</div>
+            <div class="card-text">
+              {{ item.creationTime }}
+            </div>
+            <div class="card-text">
+              Number of bids: <span>{{ item.numberOfBids }}</span>
+            </div>
+            <div class="text-yellow card-text">
+              Highest bidder: <span>{{ item.highestBidder }}</span>
+            </div>
+          </ng-template>
+          <ng-template #popTitle
+            ><div class="font-weight-bold">INFO</div></ng-template
+          >
+          <a
+            class="btn btn-outline-secondary"
+            [ngbPopover]="popContent"
+            [popoverTitle]="popTitle"
+          >
+            <mdb-icon fas icon="info-circle" class="ml-1"></mdb-icon>
+          </a>
+        </div>
       </form>
-      <!-- Button -->
-      <div>
-        <ng-template #popContent
-          ><!-- Text -->
-          <div class="card-text">{{ item.description }}</div>
-          <div class="card-text">
-            {{ item.creationTime }}
-          </div>
-          <div class="card-text">
-            Number of bids: <span>{{ item.numberOfBids }}</span>
-          </div>
-          <div class="text-yellow card-text">
-            Highest bidder: <span>{{ item.highestBidder }}</span>
-          </div>
-        </ng-template>
-        <ng-template #popTitle
-          ><div class="font-weight-bold">INFO</div></ng-template
-        >
-        <a
-          class="btn btn-outline-secondary"
-          [ngbPopover]="popContent"
-          [popoverTitle]="popTitle"
-        >
-          <mdb-icon fas icon="info-circle" class="ml-1"></mdb-icon>
-        </a>
-      </div>
     </div>
   </div>
 

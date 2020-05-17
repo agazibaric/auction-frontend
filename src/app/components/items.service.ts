@@ -4,15 +4,16 @@ import { AppService } from "../service/app.service";
 import { Observable, of, throwError } from "rxjs";
 import { Item } from "./item/item.component";
 import { retry, catchError } from "rxjs/operators";
+import { environment } from "src/environments/environment.prod";
 
 @Injectable({
   providedIn: "root"
 })
 export class ItemsService {
-  itemsUrl = "http://localhost:8080/items";
-  userItemsUrl = "http://localhost:8080/users/"; // later refactor into string format
-  bidUrl = "http://localhost:8080/bid";
-  baseUrl = "http://localhost:8080/";
+  baseUrl = environment.apiUrl;
+  itemsUrl = this.baseUrl + "items";
+  userItemsUrl = this.baseUrl + "users/"; // later refactor into string format
+  bidUrl = this.baseUrl + "bid";
 
   // Http Headers
   httpOptions = {
@@ -47,6 +48,10 @@ export class ItemsService {
 
   getHighestBidder(highestBidderHref) {
     return this.http.get<any>(highestBidderHref);
+  }
+
+  getItemUser(userHref) {
+    return this.http.get<any>(userHref);
   }
 
   createItem(item: Item) {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { AppService } from "src/app/service/app.service";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-login",
@@ -24,9 +25,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem("password", this.password);
 
         //this.router.navigateByUrl("/");
-        this.router
-          .navigateByUrl("/test", { skipLocationChange: true })
-          .then(() => this.router.navigate(["/"]));
+        window.location.href = "/";
       },
       error => {
         alert("Invalid username or password");

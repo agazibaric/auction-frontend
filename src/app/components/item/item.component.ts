@@ -19,37 +19,26 @@ export class ItemComponent implements OnInit {
   itemImage: File;
   image: Observable<string>;
   imagePath: string;
+  isExpired: boolean;
+  isHighestBidder: boolean = false;
 
-  constructor(
-    private itemService: ItemsService,
-    private auth: AppService,
-    private sanitizer: DomSanitizer
-  ) {}
+  constructor(private itemService: ItemsService, private auth: AppService) {}
 
   ngOnInit() {
     this.updateHighestBidder();
-
-    /* const reader = new FileReader();
-    reader.onload = e => (this.image = reader.result);
-    reader.readAsDataURL(new Blob([this.item.image])); */
-
-    console.log("IMAGEEEEEE");
-    console.log(this.item.image);
-    //this.image = this.itemService.loadImage(this.item.id);
+    this.updateItemUser();
     this.imagePath = "http://localhost:8080/items/" + this.item.id + "/image";
   }
 
-  ngAfterContentInit() {
-    console.log("_______________AFTER CONTENT INIT___________");
-    console.log(this.item);
+  ngAfterContentInit() {}
+
+  setIsExpired(isExpired: boolean) {
+    this.item.isExpired = isExpired;
   }
 
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
-
-    console.log("_______________AFTER VIEW INIT___________");
-    console.log(this.item);
 
     moment.locale("hr");
     let itemDuration = moment.duration(this.item.duration);
@@ -59,16 +48,9 @@ export class ItemComponent implements OnInit {
 
     let endTimeFormat = endTime.format("YYYY/MM/DD HH:mm");
 
-    console.log("this.item.creationTime: " + this.item.creationTime);
-    console.log("Ending time local: " + endTimeFormat);
-    console.log("Duration in minutes: " + itemDuration.asMinutes());
-    console.log("IsExpired: " + !endTime.isAfter(moment().local(), "second"));
-
     let itemId = "#clock-" + this.item.id;
     let timeInfo: string;
     $(itemId).countdown(endTimeFormat, function(event) {
-      console.log("...--..--..--..-- JQUERY ..--..--..--..--.");
-      
       moment.locale("hr");
       if (endTime.isAfter(moment().local(), "second")) {
         let days = event.strftime("%D");
@@ -91,10 +73,6 @@ export class ItemComponent implements OnInit {
         timeInfo = event.strftime(daysFormat + " %H:%M:%S");
       } else {
         timeInfo = "Expired!";
-        console.log(
-          "____________________________EXPIRED__________________________________"
-        );
-        console.log(this.item);
       }
       $(this).html(timeInfo);
     });
@@ -106,17 +84,41 @@ export class ItemComponent implements OnInit {
       .subscribe(
         data => {
           this.item.highestBidder = data["username"];
+          if (this.item.highestBidder == this.auth.getUsername()) {
+            this.isHighestBidder = true;
+          }
         },
         error => {
-          console.log(error);
+          // There is no highest bidder for this item
           this.item.highestBidder = null;
         }
       );
   }
 
+  updateItemUser() {
+    this.itemService.getItemUser(this.item._links["user"].href).subscribe(
+      data => {
+        this.item.user = data["username"];
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  isYourItem() {
+    return this.item.user == this.auth.getUsername();
+  }
+
   onBid(event: Event) {
     if (!this.auth.isUserLoggedIn()) {
       alert("You have to be logged in to make a bid!");
+      return;
+    }
+    let currentUser = this.auth.getUsername();
+
+    if (currentUser == this.item.user) {
+      alert("You can not bid on your own item!");
       return;
     }
 
@@ -137,26 +139,52 @@ export class ItemComponent implements OnInit {
       return;
     }
 
-    this.item.bidPrice = this.bidPrice;
-    this.item.numberOfBids++;
-    this.item.highestBidder = this.auth.getUsername();
-    this.itemService.itemBid(this.bidPrice, this.item.id).subscribe(
-      data => {
-        console.log(data);
-        alert("You are now highest bidder!");
-      },
-      error => {
-        console.log("ERROR");
-        console.log(error);
-        alert("STATUS: " + error.status + "\nMESSAGE: " + error.error);
+    if (this.item.highestBidderPrice < this.bidPrice) {
+      if (this.item.highestBidder == currentUser) {
+        this.item.highestBidderPrice = this.bidPrice;
+      } else {
+        this.item.bidPrice = this.item.highestBidderPrice;
+        this.item.highestBidderPrice = this.bidPrice;
+        this.item.numberOfBids++;
+        this.item.highestBidder = currentUser;
+        this.isHighestBidder = true;
       }
-    );
+      this.itemService.itemBid(this.bidPrice, this.item.id).subscribe(
+        data => {
+          console.log(data);
+          alert("You are now highest bidder!");
+        },
+        error => {
+          console.log("ERROR");
+          console.log(error);
+          alert("STATUS: " + error.status + "\nMESSAGE: " + error.error);
+        }
+      );
+    } else if (
+      this.item.bidPrice < this.bidPrice &&
+      this.item.highestBidder != currentUser
+    ) {
+      this.item.bidPrice = this.bidPrice;
+      this.item.numberOfBids++;
+      this.itemService.itemBid(this.bidPrice, this.item.id).subscribe(
+        data => {
+          console.log(data);
+          alert("Bid price has not exceeded highest bid price!");
+        },
+        error => {
+          console.log("ERROR");
+          console.log(error);
+          alert("STATUS: " + error.status + "\nMESSAGE: " + error.error);
+        }
+      );
+    }
   }
 }
 
 export class Item {
   id: string;
   bidPrice: number;
+  highestBidderPrice: number;
   creationTime: string;
   description: string;
   duration: string;
@@ -164,6 +192,7 @@ export class Item {
   name: string;
   numberOfBids: number;
   highestBidder: string;
+  user: string;
   isExpired: boolean;
   _links: string;
   image: any;

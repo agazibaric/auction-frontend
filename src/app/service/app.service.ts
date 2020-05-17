@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { User } from "../model/user";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: "root"
@@ -11,7 +12,7 @@ export class AppService {
   authenticated = false;
   username = "";
   password = "";
-  baseApiUrl: string = "http://localhost:8080";
+  baseApiUrl: string = environment.apiUrl;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -22,7 +23,7 @@ export class AppService {
     userForm.append("password", user.password);
     userForm.append("passwordConfirm", user.passwordConfirm);
     return this.httpClient
-      .post<any>(`${this.baseApiUrl}/registration`, userForm)
+      .post<any>(`${this.baseApiUrl}registration`, userForm)
       .subscribe(
         data => {
           alert("You sign up successfully");
@@ -41,22 +42,20 @@ export class AppService {
     const headers = new HttpHeaders({
       Authorization: "Basic " + token
     });
-    return this.httpClient
-      .get<any>("http://localhost:8080/user", { headers })
-      .pipe(
-        map(userData => {
-          console.log("Successful");
-          console.log(userData);
-          this.username = username;
-          this.password = password;
-          this.authenticated = true;
-          localStorage.setItem("id", userData["id"]);
-          localStorage.setItem("username", username);
-          localStorage.setItem("password", password);
-          localStorage.setItem("token", token);
-          return userData;
-        })
-      );
+    return this.httpClient.get<any>(this.baseApiUrl + "user", { headers }).pipe(
+      map(userData => {
+        console.log("Successful");
+        console.log(userData);
+        this.username = username;
+        this.password = password;
+        this.authenticated = true;
+        localStorage.setItem("id", userData["id"]);
+        localStorage.setItem("username", username);
+        localStorage.setItem("password", password);
+        localStorage.setItem("token", token);
+        return userData;
+      })
+    );
   }
 
   getUserId() {
